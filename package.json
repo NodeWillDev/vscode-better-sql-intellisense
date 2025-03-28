@@ -17,7 +17,37 @@
         "command": "sql-intellisense",
         "title": "Hello World"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Configuration sql-intellisense",
+      "properties": {
+        "sql-intellisense.database-remote-name": {
+          "type": "string",
+          "default": "root",
+          "description": "Define database account name"
+        },
+        "sql-intellisense.database-remote-password": {
+          "type": "string",
+          "default": "root",
+          "description": "Define database account password"
+        },
+        "sql-intellisense.database-remote-host": {
+          "type": "string",
+          "default": "localhost",
+          "description": "Define database host"
+        },
+        "sql-intellisense.database-remote-port": {
+          "type": "number",
+          "default": 3306,
+          "description": "Define database port number"
+        },
+        "sql-intellisense.database-remote-database": {
+          "type": "string",
+          "default": "CRUD",
+          "description": "Define database"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -27,14 +57,17 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.98.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.98.0",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
-    "eslint": "^9.23.0",
-    "typescript": "^5.8.2",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.23.0",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "mysql2": "^3.14.0"
   }
 }
