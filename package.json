@@ -21,10 +21,10 @@
     "configuration": {
       "title": "Configuration sql-intellisense",
       "properties": {
-        "sql-intellisense.database-remote-name": {
+        "sql-intellisense.database-remote-user": {
           "type": "string",
           "default": "root",
-          "description": "Define database account name"
+          "description": "Define database account user name"
         },
         "sql-intellisense.database-remote-password": {
           "type": "string",
@@ -43,7 +43,7 @@
         },
         "sql-intellisense.database-remote-database": {
           "type": "string",
-          "default": "CRUD",
+          "default": "ban",
           "description": "Define database"
         }
       }
