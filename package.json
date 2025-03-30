@@ -21,6 +21,11 @@
     "configuration": {
       "title": "Configuration sql-intellisense",
       "properties": {
+        "sql-intellisense.database-remote": {
+          "type": "boolean",
+          "default": false,
+          "description": "if your database is remote using with 'true'"
+        },
         "sql-intellisense.database-remote-user": {
           "type": "string",
           "default": "root",
