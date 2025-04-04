@@ -9,3 +9,9 @@ export const SQL =
  */
 export const TABLE =
   /\b(FROM|JOIN|UPDATE|INTO|DELETE\s+FROM|TRUNCATE|REPLACE|MERGE\s+INTO)\s*$/i;
+
+/**
+ * @description Regular Expression to get columns
+ */
+export const COLUMNS =
+  /\b(SELECT|WHERE|SET|ON|GROUP\s+BY|ORDER\s+BY|HAVING)\s*$/i;

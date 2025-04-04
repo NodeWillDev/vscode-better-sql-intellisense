@@ -57,7 +57,6 @@ export class SQLTable extends Plugin {
           vscode.CompletionItemKind.Interface
         );
         const markdown = new vscode.MarkdownString("## COLUMNS\n\n");
-        markdown.isTrusted = true;
         table.data.forEach((fields) => {
           markdown.appendMarkdown(
             `\`\`\`md\n` +
