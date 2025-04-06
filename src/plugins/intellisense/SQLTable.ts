@@ -8,26 +8,12 @@ import {
 } from "../../load/remote/LoadRemoteTables";
 
 export class SQLTable extends Plugin {
-  //   private intellisense: vscode.Disposable;
+  private intellisense!: vscode.Disposable;
 
-  private tables: { [key: string]: DescribeTablesData }[] | null = null;
+  private tables: DescribeTablesData[] | null = null;
 
   constructor(main: vscode.ExtensionContext) {
     super(main);
-    // this.intellisense = vscode.languages.registerCompletionItemProvider(
-    //   {
-    //     scheme: "file",
-    //     language: "javascript",
-    //   },
-    //   {
-    //     async provideCompletionItems(document, position, token, context) {
-    //       if (TABLE.test(document.lineAt(position).text)) {
-    //       }
-    //       return [];
-    //     },
-    //   },
-    //   " "
-    // );
   }
 
   public async init(): Promise<SQLTable> {
@@ -38,13 +24,61 @@ export class SQLTable extends Plugin {
       port: 3306,
       user: "root",
     });
-    try {
-      console.log(remote);
-    } catch (error) {
-      console.log(error);
-    }
-    // console.log(this.tables);
-    // this.main.subscriptions.push(this.intellisense);
+    this.tables =
+      (await remote.getFieldsData()) as unknown as DescribeTablesData[];
+    this.intellisense = vscode.languages.registerCompletionItemProvider(
+      {
+        scheme: "file",
+        language: "javascript",
+      },
+      {
+        provideCompletionItems: this.provideCompletionItems.bind(this),
+      }
+    );
+    this.main.subscriptions.push(this.intellisense);
     return this;
+  }
+
+  private provideCompletionItems(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    token: vscode.CancellationToken,
+    context: vscode.CompletionContext
+  ) {
+    const result: vscode.CompletionItem[] = [];
+    if (
+      TABLE.test(
+        document.lineAt(position).text.substring(0, position.character)
+      )
+    ) {
+      this.tables?.forEach((table) => {
+        const completion = new vscode.CompletionItem(
+          table["TABLE_NAME"],
+          vscode.CompletionItemKind.Interface
+        );
+        const markdown = new vscode.MarkdownString("## COLUMNS\n\n");
+        markdown.isTrusted = true;
+        table.data.forEach((fields) => {
+          markdown.appendMarkdown(
+            `\`\`\`md\n` +
+              `🔹 ${fields["COLUMN_NAME"]}\n` +
+              `🟢 Type: ${fields["COLUMN_TYPE"]}\n` +
+              `🟡 Default: ${fields["COLUMN_DEFAULT"] || "NULL"}\n` +
+              `🔸 Accept Null: ${fields["IS_NULLABLE"]}\n` +
+              (fields["COLUMN_KEY"]
+                ? `🔑 Key: ${fields["COLUMN_KEY"]}\n`
+                : "") +
+              (fields["EXTRA"] ? `⚙️ Extra: ${fields["EXTRA"]}\n` : "") +
+              `\`\`\`\n-----\n`
+          );
+        });
+        completion.documentation = markdown;
+        completion.detail = `Columns of table ${table[
+          "TABLE_NAME"
+        ].toUpperCase()}`;
+        result.push(completion);
+      });
+    }
+    return result;
   }
 }

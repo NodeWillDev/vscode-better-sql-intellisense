@@ -12,7 +12,7 @@ export interface DescribeTablesData {
     EXTRA: string | null;
     COLUMN_COMMENT: string | null;
   }[];
-  TABLE_NAME: string | null;
+  TABLE_NAME: string;
 }
 
 export class LoadRemoteTables extends Load {
@@ -49,9 +49,12 @@ export class LoadRemoteTables extends Load {
   }
 
   public async getFieldsData(): Promise<
-    { [key: string]: DescribeTablesData }[]
+    Array<{ TABLE_NAME: string; data: DescribeTablesData["data"] }>
   > {
-    const result: { [key: string]: DescribeTablesData } = {};
+    const result: Array<{
+      TABLE_NAME: string;
+      data: DescribeTablesData["data"];
+    }> = [];
     for (const table of await this.getTables()) {
       const data = (
         await this.connection.query(
@@ -72,17 +75,9 @@ export class LoadRemoteTables extends Load {
             WHERE TABLE_NAME = '${table}' 
             AND TABLE_SCHEMA = '${this.connection.config.database}';`
         )
-      )["0"] as Array<{
-        COLUMN_NAME: string;
-        COLUMN_TYPE: string;
-        IS_NULLABLE: "YES" | "NO";
-        COLUMN_KEY: string | null;
-        COLUMN_DEFAULT: string | null;
-        EXTRA: string | null;
-        COLUMN_COMMENT: string | null;
-      }>;
-      result[table] = { data, TABLE_NAME: table };
+      )["0"] as DescribeTablesData["data"];
+      result.push({ TABLE_NAME: table, data });
     }
-    return Object.entries(result).map(([key, value]) => ({ [key]: value }));
+    return result;
   }
 }

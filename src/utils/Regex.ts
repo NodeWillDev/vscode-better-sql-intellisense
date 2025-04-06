@@ -8,4 +8,4 @@ export const SQL =
  * @description Regular expression to find tables
  */
 export const TABLE =
-  /\b((?:FROM|JOIN|INTO|UPDATE|TABLE)\s+[`"'`]?([a-zA-Z0-9_]+)[`"'`]?)/gi;
+  /\b(FROM|JOIN|UPDATE|INTO|DELETE\s+FROM|TRUNCATE|REPLACE|MERGE\s+INTO)\s*$/i;

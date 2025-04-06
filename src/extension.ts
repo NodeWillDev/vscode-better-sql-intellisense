@@ -9,29 +9,26 @@ export function activate(context: vscode.ExtensionContext) {
       await LoadPlugins.load(context);
     }
   );
-
-  const intellisense = vscode.languages.registerCompletionItemProvider(
+  let test = vscode.languages.registerCompletionItemProvider(
     {
-      language: "javascript",
       scheme: "file",
+      language: "javascript",
     },
     {
-      async provideCompletionItems(document, position, token, context) {
-        if (
-          /\b(?:FROM|JOIN|UPDATE|INTO|DELETE\s+FROM)\s+([a-zA-Z0-9_.]+)/gi.test(
-            document.getText()
-          )
-        )
-          console.log("find");
-        else console.log("NOT FOUND");
-        return [
-          new vscode.CompletionItem("test", vscode.CompletionItemKind.Color),
-        ];
+      provideCompletionItems(document, position) {
+        const line = document.lineAt(position).text;
+        const textUntilCursor = line.substring(0, position.character);
+
+        if (/from\s*$/i.test(textUntilCursor)) {
+          console.log("Right now digit 'from' (with or out whitespace)");
+        }
+
+        return [];
       },
     },
     "."
   );
   context.subscriptions.push(disposable);
-  context.subscriptions.push(intellisense);
+  context.subscriptions.push(test);
 }
 export function deactivate() {}
