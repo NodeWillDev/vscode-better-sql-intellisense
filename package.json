@@ -15,7 +15,7 @@
     "commands": [
       {
         "command": "sql-intellisense",
-        "title": "Hello World"
+        "title": "Intellisense for SQL"
       }
     ],
     "configuration": {
