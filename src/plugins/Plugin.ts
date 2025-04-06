@@ -8,5 +8,5 @@ export abstract class Plugin {
     this.main = main;
   }
 
-  public abstract init(): Plugin;
+  public abstract init(): Promise<Plugin>;
 }

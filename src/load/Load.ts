@@ -1,3 +1,1 @@
-export abstract class Load<T> {
-  protected data: T | null = null;
-}
+export abstract class Load {}

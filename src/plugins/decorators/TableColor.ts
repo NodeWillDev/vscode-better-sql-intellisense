@@ -1,14 +1,14 @@
 import * as vscode from "vscode";
 import { Plugin } from "../Plugin";
-import { SQL } from "../../utils/Regex";
+import { SQL, TABLE } from "../../utils/Regex";
 
-export class SQLColor extends Plugin {
+export class TableColor extends Plugin {
   private decorator: vscode.TextEditorDecorationType;
 
   constructor(main: vscode.ExtensionContext) {
     super(main);
     this.decorator = vscode.window.createTextEditorDecorationType({
-      color: "#569CD6",
+      color: "#662fab",
     });
   }
 
@@ -19,16 +19,28 @@ export class SQLColor extends Plugin {
     let ranges: vscode.DecorationOptions[] = [];
 
     let match;
-    while ((match = SQL.exec(editor.document.getText()))) {
-      let start = editor.document.positionAt(match.index);
-      let end = editor.document.positionAt(match.index + match[0].length);
+    console.log(
+      /(["'`])(?:[^"'`\\]|\\.)*?\b(SELECT|CREATE|INSERT|UPDATE|DELETE|FROM|WHERE|JOIN|ON|LIKE|GROUP BY|ORDER BY|LIMIT)\b(?:[^"'`\\]|\\.)*?\1|\b(?:FROM|JOIN|INTO|UPDATE|TABLE)\s+[`"'`]?([a-zA-Z0-9_]+)[`"'`]?\b/gi.exec(
+        editor.document.getText()
+      )
+    );
+    while ((match = TABLE.exec(editor.document.getText()))) {
+      if (!match[1]) continue;
+
+      const start = editor.document.positionAt(
+        match.index + match[0].indexOf(match[1])
+      );
+      const end = editor.document.positionAt(
+        match.index + match[0].indexOf(match[1]) + match[1].length
+      );
+
       ranges.push({ range: new vscode.Range(start, end) });
     }
 
     editor.setDecorations(this.decorator, ranges);
   }
 
-  public async init(): Promise<SQLColor> {
+  public async init(): Promise<TableColor> {
     this.main.subscriptions.push(
       vscode.window.onDidChangeActiveTextEditor(this.updateColor)
     );

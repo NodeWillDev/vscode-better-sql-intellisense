@@ -1,12 +1,12 @@
 import * as vscode from "vscode";
-import { Connection } from "mysql2/promise";
 import { LoadPlugins } from "./plugins/LoadPlugins";
+import { LoadRemoteTables } from "./load/remote/LoadRemoteTables";
 
 export function activate(context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand(
     "sql-intellisense",
     async () => {
-      LoadPlugins.load(context);
+      await LoadPlugins.load(context);
     }
   );
 
@@ -17,7 +17,11 @@ export function activate(context: vscode.ExtensionContext) {
     },
     {
       async provideCompletionItems(document, position, token, context) {
-        if (/\b(SELECT|FROM)\b/i.test(document.lineAt(position).text))
+        if (
+          /\b(?:FROM|JOIN|UPDATE|INTO|DELETE\s+FROM)\s+([a-zA-Z0-9_.]+)/gi.test(
+            document.getText()
+          )
+        )
           console.log("find");
         else console.log("NOT FOUND");
         return [
