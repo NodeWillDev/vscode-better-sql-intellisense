@@ -10,7 +10,7 @@ import {
 export class SQLColumns extends Plugin {
   private intellisense!: vscode.Disposable;
 
-  private table: string = "";
+  private table: DescribeTablesData[] | null = null;
 
   constructor(main: vscode.ExtensionContext) {
     super(main);
@@ -24,6 +24,7 @@ export class SQLColumns extends Plugin {
       port: 3306,
       user: "root",
     });
+    this.table = Object.values(await remote.getFieldsData());
     this.intellisense = vscode.languages.registerCompletionItemProvider(
       {
         scheme: "file",
@@ -37,6 +38,8 @@ export class SQLColumns extends Plugin {
     return this;
   }
 
+  private reference: string = "";
+
   private provideCompletionItems(
     document: vscode.TextDocument,
     position: vscode.Position,
@@ -44,15 +47,29 @@ export class SQLColumns extends Plugin {
     context: vscode.CompletionContext
   ) {
     const result: vscode.CompletionItem[] = [];
-    console.log(
-      document.lineAt(position).text.substring(0, position.character)
-    );
+    let match =
+      /\bSELECT\b\s+(.*?)\s+\bFROM\b\s+[`"'`]?(?<table>\w+)[`"'`]?(?=\s|$)/gim.exec(
+        document.lineAt(position).text
+      );
+    if (match?.groups?.["table"]) this.reference = match?.groups?.["table"];
     if (
-      TABLE.test(
+      this.reference &&
+      /\bSELECT\b(?![\s\S]*\bFROM\b)/i.test(
         document.lineAt(position).text.substring(0, position.character)
       )
     ) {
+      this.table
+        ?.find((table) => table.TABLE_NAME === this.reference)
+        ?.data.forEach((data) => {
+          result.push(
+            new vscode.CompletionItem(
+              data["COLUMN_NAME"],
+              vscode.CompletionItemKind.Variable
+            )
+          );
+        });
     }
+
     return result;
   }
 }

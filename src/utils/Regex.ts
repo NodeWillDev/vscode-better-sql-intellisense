@@ -11,7 +11,7 @@ export const TABLE =
   /\b(FROM|JOIN|UPDATE|INTO|DELETE\s+FROM|TRUNCATE|REPLACE|MERGE\s+INTO)\s*$/i;
 
 /**
- * @description Regular Expression to get columns
+ * @description Regular Expression to get columns and tables
  */
 export const COLUMNS =
-  /\b(SELECT|WHERE|SET|ON|GROUP\s+BY|ORDER\s+BY|HAVING)\s*$/i;
+  /\bSELECT\b\s+(.*?)\s+\bFROM\b\s+[`"'`]?(?<table>\w+)[`"'`]?(?=\s|$)|\bINSERT\s+INTO\b\s+[`"'`]?(?<table>\w+)[`"'`]?\s*\((?<insert_cols>[^)]+)\)|\bUPDATE\b\s+[`"'`]?(?<table>\w+)[`"'`]?\s+\bSET\b\s+(?<update_set>[^;]+?)(?=\s+\bWHERE\b|$)|\bDELETE\s+FROM\b\s+[`"'`]?(?<table>\w+)[`"'`]?(?=\s|$)/gim;

@@ -3,7 +3,8 @@ import { Connection } from "mysql2/promise";
 import { Load } from "../Load";
 
 export interface DescribeTablesData {
-  data: {
+  TABLE_NAME: string;
+  data: Array<{
     COLUMN_NAME: string;
     COLUMN_TYPE: string;
     IS_NULLABLE: "YES" | "NO";
@@ -11,8 +12,7 @@ export interface DescribeTablesData {
     COLUMN_DEFAULT: string | null;
     EXTRA: string | null;
     COLUMN_COMMENT: string | null;
-  }[];
-  TABLE_NAME: string;
+  }>;
 }
 
 export class LoadRemoteTables extends Load {
@@ -40,7 +40,6 @@ export class LoadRemoteTables extends Load {
   }
 
   public async getTables(): Promise<string[]> {
-    console.log(this.connection);
     return (
       (await this.connection.query("SHOW TABLES"))[0] as Array<{
         [key: string]: string;
@@ -48,13 +47,8 @@ export class LoadRemoteTables extends Load {
     ).map((row: { [key: string]: string }) => Object.values(row)[0]);
   }
 
-  public async getFieldsData(): Promise<
-    Array<{ TABLE_NAME: string; data: DescribeTablesData["data"] }>
-  > {
-    const result: Array<{
-      TABLE_NAME: string;
-      data: DescribeTablesData["data"];
-    }> = [];
+  public async getFieldsData(): Promise<Record<string, DescribeTablesData>> {
+    const result: Record<string, DescribeTablesData> = {};
     for (const table of await this.getTables()) {
       const data = (
         await this.connection.query(
@@ -76,7 +70,7 @@ export class LoadRemoteTables extends Load {
             AND TABLE_SCHEMA = '${this.connection.config.database}';`
         )
       )["0"] as DescribeTablesData["data"];
-      result.push({ TABLE_NAME: table, data });
+      result[table] = { TABLE_NAME: table, data };
     }
     return result;
   }

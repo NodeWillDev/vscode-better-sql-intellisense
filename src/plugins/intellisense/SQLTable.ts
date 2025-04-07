@@ -24,8 +24,7 @@ export class SQLTable extends Plugin {
       port: 3306,
       user: "root",
     });
-    this.tables =
-      (await remote.getFieldsData()) as unknown as DescribeTablesData[];
+    this.tables = Object.values(await remote.getFieldsData());
     this.intellisense = vscode.languages.registerCompletionItemProvider(
       {
         scheme: "file",
@@ -53,28 +52,24 @@ export class SQLTable extends Plugin {
     ) {
       this.tables?.forEach((table) => {
         const completion = new vscode.CompletionItem(
-          table["TABLE_NAME"],
+          table.TABLE_NAME,
           vscode.CompletionItemKind.Interface
         );
         const markdown = new vscode.MarkdownString("## COLUMNS\n\n");
-        table.data.forEach((fields) => {
+        table.data.forEach((fields: DescribeTablesData["data"][number]) => {
           markdown.appendMarkdown(
             `\`\`\`md\n` +
-              `🔹 ${fields["COLUMN_NAME"]}\n` +
-              `🟢 Type: ${fields["COLUMN_TYPE"]}\n` +
-              `🟡 Default: ${fields["COLUMN_DEFAULT"] || "NULL"}\n` +
-              `🔸 Accept Null: ${fields["IS_NULLABLE"]}\n` +
-              (fields["COLUMN_KEY"]
-                ? `🔑 Key: ${fields["COLUMN_KEY"]}\n`
-                : "") +
-              (fields["EXTRA"] ? `⚙️ Extra: ${fields["EXTRA"]}\n` : "") +
+              `🔹 ${fields.COLUMN_NAME}\n` +
+              `🟢 Type: ${fields.COLUMN_TYPE}\n` +
+              `🟡 Default: ${fields.COLUMN_DEFAULT || "NULL"}\n` +
+              `🔸 Accept Null: ${fields.IS_NULLABLE}\n` +
+              (fields.COLUMN_KEY ? `🔑 Key: ${fields.COLUMN_KEY}\n` : "") +
+              (fields.EXTRA ? `⚙️ Extra: ${fields.EXTRA}\n` : "") +
               `\`\`\`\n-----\n`
           );
         });
         completion.documentation = markdown;
-        completion.detail = `Columns of table ${table[
-          "TABLE_NAME"
-        ].toUpperCase()}`;
+        completion.detail = `Columns of table ${table.TABLE_NAME.toUpperCase()}`;
         result.push(completion);
       });
     }
