@@ -24,7 +24,7 @@
       "properties": {
         "better-sql-intellisense.database-remote": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "if your database is remote using with 'true'"
         },
         "better-sql-intellisense.database-remote-user": {
@@ -71,7 +71,7 @@
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
-    "@types/node": "20.x",
+    "@types/node": "^20.17.30",
     "@types/vscode": "^1.98.0",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
@@ -81,6 +81,7 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
-    "mysql2": "^3.14.0"
+    "mysql2": "^3.14.0",
+    "sqlite3": "^5.1.7"
   }
 }
