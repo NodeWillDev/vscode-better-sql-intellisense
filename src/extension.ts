@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import { LoadRemoteDatabase } from "./load/remote/LoadRemoteDatabase";
 import { Load } from "./load/Load";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -11,4 +10,5 @@ export function activate(context: vscode.ExtensionContext) {
   );
   context.subscriptions.push(disposable);
 }
+
 export function deactivate() {}

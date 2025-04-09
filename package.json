@@ -71,7 +71,7 @@
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
-    "@types/node": "^20.17.30",
+    "@types/node": "^22.14.1",
     "@types/vscode": "^1.98.0",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
@@ -82,6 +82,7 @@
   },
   "dependencies": {
     "mysql2": "^3.14.0",
+    "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
   }
 }
