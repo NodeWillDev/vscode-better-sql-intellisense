@@ -1,19 +1,10 @@
 import * as vscode from "vscode";
 import * as mysql from "mysql2/promise";
+import { Load } from "../Load";
+import { DatabaseType, ILoad } from "../ILoad";
 
-type DatabaseType = {
-  COLUMN_NAME: string;
-  COLUMN_TYPE: string;
-  IS_NULLABLE: string;
-  COLUMN_KEY: string;
-  COLUMN_DEFAULT: string | null;
-  EXTRA: string;
-  COLUMN_COMMENT: string;
-};
-
-export class LoadRemoteDatabase {
-  public static data: Record<string, { name: string; data: DatabaseType[] }> =
-    {};
+export class LoadRemoteDatabase implements ILoad {
+  public data: Record<string, { name: string; data: DatabaseType[] }> = {};
 
   public async init(): Promise<void> {
     const config = vscode.workspace.getConfiguration("better-sql-intellisense");
@@ -33,7 +24,7 @@ export class LoadRemoteDatabase {
     Object.values(
       (await connection.query("SHOW TABLES;")).slice(0, 1)[0]
     ).forEach(async (table) => {
-      LoadRemoteDatabase.data[Object.values(table)[0] as string] = {
+      this.data[Object.values(table)[0] as string] = {
         name: Object.values(table)[0] as string,
         data: [],
       };
@@ -53,7 +44,7 @@ export class LoadRemoteDatabase {
           )
         )[0] as DatabaseType[]
       ).forEach((data) => {
-        LoadRemoteDatabase.data[Object.values(table)[0] as string].data.push({
+        this.data[Object.values(table)[0] as string].data.push({
           COLUMN_NAME: (data as unknown as DatabaseType).COLUMN_NAME,
           COLUMN_TYPE: (data as unknown as DatabaseType).COLUMN_TYPE,
           COLUMN_COMMENT: (data as unknown as DatabaseType).COLUMN_COMMENT,
@@ -64,6 +55,6 @@ export class LoadRemoteDatabase {
         });
       });
     });
-    console.log(LoadRemoteDatabase.data);
+    console.log(this.data);
   }
 }
