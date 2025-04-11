@@ -15,6 +15,12 @@ export class SQLUpdateSnippet extends Plugin {
         },
         {
           provideCompletionItems(document, position) {
+            if (
+              !/^U/.test(
+                document.getText(document.getWordRangeAtPosition(position))
+              )
+            )
+              return;
             const completion = new vscode.CompletionItem(
               "InsertSQL",
               vscode.CompletionItemKind.Snippet

@@ -15,6 +15,12 @@ export class SQLCreateSnippet extends Plugin {
         },
         {
           provideCompletionItems(document, position) {
+            if (
+              !/^C/.test(
+                document.getText(document.getWordRangeAtPosition(position))
+              )
+            )
+              return;
             const completion = new vscode.CompletionItem(
               "CreateSQL",
               vscode.CompletionItemKind.Snippet

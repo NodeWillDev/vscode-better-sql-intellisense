@@ -15,6 +15,14 @@ export class SQLSelectSnippet extends Plugin {
         },
         {
           provideCompletionItems(document, position) {
+            // Se não começar com 'S', não retorna nada
+            if (
+              !/^S/.test(
+                document.getText(document.getWordRangeAtPosition(position))
+              )
+            )
+              return;
+
             const completion = new vscode.CompletionItem(
               "SelectSQL",
               vscode.CompletionItemKind.Snippet
@@ -27,11 +35,11 @@ export class SQLSelectSnippet extends Plugin {
             completion.documentation = new vscode.MarkdownString(
               "Snippet to make a query on the table"
             );
+            completion.filterText = "SelectSQL";
 
             return [completion];
           },
-        },
-        "SelectSQL"
+        }
       )
     );
     return this;

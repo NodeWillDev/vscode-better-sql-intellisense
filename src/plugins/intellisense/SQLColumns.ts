@@ -10,7 +10,7 @@ import {
 export class SQLColumns extends Plugin {
   private intellisense!: vscode.Disposable;
 
-  private table: DescribeTablesData[] | null = null;
+  private table: DescribeTablesData[] = [];
 
   constructor(main: vscode.ExtensionContext) {
     super(main);
@@ -32,7 +32,8 @@ export class SQLColumns extends Plugin {
       },
       {
         provideCompletionItems: this.provideCompletionItems.bind(this),
-      }
+      },
+      ""
     );
     this.main.subscriptions.push(this.intellisense);
     return this;
@@ -61,16 +62,28 @@ export class SQLColumns extends Plugin {
       (match =
         /(?:"'?\s*\bSELECT\b\s*(?!.*\b(FROM|WHERE|VALUES|RETURNING|GROUP|ORDER|HAVING)\b)(?<columns>[\w\s,.*]*)\s*["']?$)|(?:"'?\s*\bUPDATE\b\s+\w+\s+\bSET\b\s+(?!.*\b(WHERE|RETURNING|FROM|GROUP|ORDER|HAVING|JOIN)\b)(?<columns>[^;]+)\s*["']?$)|(?:"'?\s*\bINSERT\s+INTO\b\s+\w+\s*\((?!.*\))(?!.*\b(VALUES|RETURNING)\b)(?<columns>[^)]*)\)?\s*["']?$)/gim.exec(
           document.lineAt(position).text.substring(0, position.character)
-        )) &&
-      match?.groups?.["columns"]
+        ))
     ) {
-      const data = Array.from(
-        (match?.groups?.["columns"] ?? "").matchAll(
-          /(?:^|,\s*)([^=,\s]+)(?=\s*(?:=|,|$))/gim
-        )
-      ).map((colum) => colum[1].trim());
-
-      console.log(data);
+      const data = this.table
+        .find((table) => table.TABLE_NAME == this.reference)
+        ?.data.filter(
+          (column) =>
+            ![
+              ...(match?.groups?.["columns"]?.matchAll(
+                /(?:^|,\s*)([^=,\s]+)(?=\s*(?:=|,|$))/gi
+              ) || []),
+            ]
+              .map(([_, name]) => name.trim().toLowerCase())
+              .includes(column.COLUMN_NAME.toLowerCase())
+        );
+      data?.forEach((colum) => {
+        const intellisense = new vscode.CompletionItem(
+          colum.COLUMN_NAME,
+          vscode.CompletionItemKind.Property
+        );
+        result.push(intellisense);
+      });
+      console.log(result);
     }
 
     return result;
