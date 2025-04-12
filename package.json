@@ -24,7 +24,7 @@
       "properties": {
         "better-sql-intellisense.database-remote": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "if your database is remote using with 'true'"
         },
         "better-sql-intellisense.database-remote-user": {
@@ -54,7 +54,9 @@
         },
         "better-sql-intellisense.database-local": {
           "type": "array",
-          "default": "[/home/var/sqlcode.sql]",
+          "default": [
+            "/home/var/sqlcode.sql"
+          ],
           "description": "Define files with sql code"
         }
       }
