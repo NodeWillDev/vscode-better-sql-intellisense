@@ -1,13 +1,24 @@
 {
   "name": "better-better-sql-intellisense",
-  "displayName": "better-better-sql-intellisense",
-  "description": "No description",
-  "version": "0.0.1",
+  "displayName": "Better SQL Intellisense",
+  "description": "Improved Intellisense for VSCode, supporting cloud databases and SQL files.",
+  "version": "0.0.2",
   "publisher": "williamdasilvadev",
+  "icon": "icon.png",
+  "author": {
+    "name": "William da Silva",
+    "url": "https://github.com/NodeWillDev/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NodeWillDev/vscode-better-sql-intellisense"
+  },
   "engines": {
     "vscode": "^1.98.0"
   },
   "categories": [
+    "Formatters",
+    "Themes",
     "Other"
   ],
   "activationEvents": [],
@@ -54,10 +65,13 @@
         },
         "better-sql-intellisense.database-local": {
           "type": "array",
-          "default": [
-            "/home/var/sqlcode.sql"
-          ],
+          "default": [],
           "description": "Define files with sql code"
+        },
+        "better-sql-intellisense.sql-code-color": {
+          "type": "string",
+          "default": "#007ACC",
+          "description": "Define color of SQL code"
         }
       }
     }

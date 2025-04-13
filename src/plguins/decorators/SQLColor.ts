@@ -7,7 +7,9 @@ export class SQLColor implements IPlugin {
   constructor(context: vscode.ExtensionContext) {
     this.context = context;
     this.decorator = vscode.window.createTextEditorDecorationType({
-      color: "#ffcccc",
+      color: vscode.workspace
+        .getConfiguration("better-sql-intellisense")
+        .get("sql-code-color"),
     });
   }
 
