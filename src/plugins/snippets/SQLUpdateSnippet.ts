@@ -22,22 +22,22 @@ export class SQLUpdateSnippet extends Plugin {
             )
               return;
             const completion = new vscode.CompletionItem(
-              "InsertSQL",
+              "UpdateSQL",
               vscode.CompletionItemKind.Snippet
             );
 
             completion.insertText = new vscode.SnippetString(
-              "INSERT INTO ${1:table_name} (${2:columns}) VALUES(${3:values});$0"
+              "UPDATE ${1:table_name} SET ${2:column} = ${3:value} WHERE ${4:condition};$0"
             );
 
             completion.documentation = new vscode.MarkdownString(
-              "Snippet to insert values into a table"
+              "Snippet to update a table"
             );
 
             return [completion];
           },
         },
-        "InsertSQL"
+        "UpdateSQL"
       )
     );
     return this;
