@@ -1,7 +1,7 @@
 {
-  "name": "sql-intellisense",
-  "displayName": "sql-intellisense",
-  "description": "",
+  "name": "better-better-sql-intellisense",
+  "displayName": "better-better-sql-intellisense",
+  "description": "No description",
   "version": "0.0.1",
   "publisher": "williamdasilvadev",
   "engines": {
@@ -15,42 +15,47 @@
   "contributes": {
     "commands": [
       {
-        "command": "sql-intellisense",
+        "command": "better-sql-intellisense",
         "title": "Intellisense for SQL"
       }
     ],
     "configuration": {
-      "title": "Configuration sql-intellisense",
+      "title": "Configuration better-sql-intellisense",
       "properties": {
-        "sql-intellisense.database-remote": {
+        "better-sql-intellisense.database-remote": {
           "type": "boolean",
           "default": false,
           "description": "if your database is remote using with 'true'"
         },
-        "sql-intellisense.database-remote-user": {
+        "better-sql-intellisense.database-remote-user": {
           "type": "string",
           "default": "root",
           "description": "Define database account user name"
         },
-        "sql-intellisense.database-remote-password": {
+        "better-sql-intellisense.database-remote-password": {
           "type": "string",
           "default": "root",
           "description": "Define database account password"
         },
-        "sql-intellisense.database-remote-host": {
+        "better-sql-intellisense.database-remote-host": {
           "type": "string",
           "default": "localhost",
           "description": "Define database host"
         },
-        "sql-intellisense.database-remote-port": {
+        "better-sql-intellisense.database-remote-port": {
           "type": "number",
           "default": 3306,
           "description": "Define database port number"
         },
-        "sql-intellisense.database-remote-database": {
+        "better-sql-intellisense.database-remote-database": {
           "type": "string",
           "default": "ban",
           "description": "Define database"
+        },
+        "better-sql-intellisense.database-local": {
+          "type": "array",
+          "default": "[/home/var/sqlcode.sql]",
+          "description": "Define files with sql code"
         }
       }
     }
