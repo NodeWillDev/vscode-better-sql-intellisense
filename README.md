@@ -46,3 +46,8 @@
   <source src="./assets/sql-color-demo.mp4" type="video/mp4">  
 </video>
 ---
+
+### Credits:
+
+- NodeWillDev (William da Silva)
+  - [GitHub](https://github.com/NodeWillDev)
