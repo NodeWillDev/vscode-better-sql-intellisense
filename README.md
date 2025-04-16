@@ -42,10 +42,7 @@
   - Sets the color (in **HEXADECIMAL**) for SQL code reality.
   - Example: `#FF5733`.
 
-<video width="45%" controls>
-  <source src="./assets/sql-color-demo.mp4" type="video/mp4">  
-</video>
----
+[](./assets/sql-color-demo.png)
 
 ### Credits:
 
