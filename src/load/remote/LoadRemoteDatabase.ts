@@ -4,7 +4,7 @@ import { Load } from "../Load";
 import { DatabaseType, ILoad } from "../ILoad";
 
 export class LoadRemoteDatabase implements ILoad {
-  public data: Record<string, { name: string; data: DatabaseType[] }> = {};
+  puablic data: Record<string, { name: string; data: DatabaseType[] }> = {};
 
   public async init(): Promise<void> {
     const config = vscode.workspace.getConfiguration("better-sql-intellisense");
