@@ -1,10 +1,10 @@
 import * as vscode from "vscode";
 import * as mysql from "mysql2/promise";
 import { Load } from "../Load";
-import { DatabaseType, ILoad } from "../ILoad";
+import { DatabaseType, ILoad, LoadDataType } from "../ILoad";
 
 export class LoadRemoteDatabase implements ILoad {
-  public data: Record<string, { name: string; data: DatabaseType[] }> = {};
+  public data: LoadDataType = {};
 
   public async init(): Promise<void> {
     const config = vscode.workspace.getConfiguration("better-sql-intellisense");
@@ -58,7 +58,6 @@ export class LoadRemoteDatabase implements ILoad {
           });
         });
       });
-      console.log(this.data);
     } catch {
       vscode.window.showErrorMessage("Could not connect to your database");
     }

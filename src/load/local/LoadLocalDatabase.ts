@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
-import { DatabaseType, ILoad } from "../ILoad";
+import { DatabaseType, ILoad, LoadDataType } from "../ILoad";
 import * as sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import * as fs from "fs/promises";
 
 export class LoadLocalDatabase implements ILoad {
-  public data: Record<string, { name: string; data: DatabaseType[] }> = {};
+  public data: LoadDataType = {};
   public async init(): Promise<void> {
     const config = vscode.workspace
       .getConfiguration("better-sql-intellisense")

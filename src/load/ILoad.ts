@@ -8,6 +8,11 @@ export type DatabaseType = {
   COLUMN_COMMENT: string;
 };
 
+export type LoadDataType = Record<
+  string,
+  { name: string; data: DatabaseType[] }
+>;
+
 export interface ILoad {
   data: Record<string, { name: string; data: DatabaseType[] }>;
   init(): Promise<void>;

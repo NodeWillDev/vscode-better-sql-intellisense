@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { IPlugin } from "../IPlugin";
+import { load } from "../../extension";
 
 export class SQLIntellisense implements IPlugin {
   private context: vscode.ExtensionContext;
@@ -43,6 +44,10 @@ export class SQLIntellisense implements IPlugin {
           .text.substring(0, position.character)
       )
     ) {
+      console.log(load.data);
+      Object.values(load.data).forEach((key) => {
+        console.log(key);
+      });
     }
     return [];
   }
