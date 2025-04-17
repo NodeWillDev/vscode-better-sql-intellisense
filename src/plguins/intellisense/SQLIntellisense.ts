@@ -45,15 +45,37 @@ export class SQLIntellisense implements IPlugin {
       )
     ) {
       Object.keys(load.data).forEach((key) => {
-        completion.push(
-          new vscode.CompletionItem(
-            key.includes("database-local")
-              ? `Database Local: ${key.replace("database-local-", "")}`
-              : `Database Remote: ${key.replace("database-remote-", "")}`
-          )
+        const intellisense = new vscode.CompletionItem(
+          key.replace(/database-(remote|local)-/g, ""),
+          /database-local-/g.test(key)
+            ? vscode.CompletionItemKind.File
+            : vscode.CompletionItemKind.Struct
         );
+        intellisense.detail = /database-local-/g.test(key)
+          ? `Local file: ${load.data[key].name}`
+          : `Remote database: ${load.data[key].name}`;
+
+        intellisense.documentation = new vscode.MarkdownString(`
+### ${load.data[key].name.toUpperCase()}
+
+**Columns:**
+${load.data[key].data
+  .map(
+    (column) => `
+- **${column.COLUMN_NAME}**  
+  ▸ Type: \`${column.COLUMN_TYPE}\`  
+  ▸ Nullable: ${column.IS_NULLABLE === "YES" ? "✅" : "❌"}  
+  ▸ Key: ${column.COLUMN_KEY || "None"}  
+  ▸ Default: \`${column.COLUMN_DEFAULT || "NULL"}\`  
+  ▸ Extra: ${column.EXTRA || "None"}  
+  ▸ Comment: ${column.COLUMN_COMMENT || "None"}  
+`
+  )
+  .join("")}
+    `);
+        completion.push(intellisense);
       });
     }
-    return [];
+    return completion;
   }
 }

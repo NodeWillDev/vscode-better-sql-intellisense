@@ -1,4 +1,4 @@
-import { DatabaseType, ILoad, LoadDataType } from "./ILoad";
+import { ILoad, LoadDataType } from "./ILoad";
 import { LoadLocalDatabase } from "./local/LoadLocalDatabase";
 import { LoadRemoteDatabase } from "./remote/LoadRemoteDatabase";
 
@@ -6,6 +6,11 @@ export class Load implements ILoad {
   public data: LoadDataType = {};
 
   private loads: ILoad[] = [];
+
+  private NAMES: Record<string, string> = {
+    "database-remote-": "Remote",
+    "database-local-": "Local",
+  };
 
   public async init(): Promise<void> {
     this.loads.push(new LoadRemoteDatabase());
@@ -23,5 +28,9 @@ export class Load implements ILoad {
   private loadDatabase(): void {
     this.data = {};
     for (const load of this.loads) this.data = { ...this.data, ...load.data };
+  }
+
+  public getIntellisenseName(key: string): string {
+    return this.NAMES[key] ?? "Database Undefined";
   }
 }

@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 import * as mysql from "mysql2/promise";
-import { Load } from "../Load";
 import { DatabaseType, ILoad, LoadDataType } from "../ILoad";
 
 export class LoadRemoteDatabase implements ILoad {
