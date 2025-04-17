@@ -44,9 +44,14 @@ export class SQLIntellisense implements IPlugin {
           .text.substring(0, position.character)
       )
     ) {
-      console.log(load.data);
-      Object.values(load.data).forEach((key) => {
-        console.log(key);
+      Object.keys(load.data).forEach((key) => {
+        completion.push(
+          new vscode.CompletionItem(
+            key.includes("database-local")
+              ? `Database Local: ${key.replace("database-local-", "")}`
+              : `Database Remote: ${key.replace("database-remote-", "")}`
+          )
+        );
       });
     }
     return [];

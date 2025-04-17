@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { DatabaseType, ILoad, LoadDataType } from "../ILoad";
+import { ILoad, LoadDataType } from "../ILoad";
 import * as sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import * as fs from "fs/promises";
